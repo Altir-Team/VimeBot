@@ -59,3 +59,11 @@ typings/
 
 # next.js build output
 .next
+
+# VS Code files
+
+.vscode
+
+# Database
+
+*.db
