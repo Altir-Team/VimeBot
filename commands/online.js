@@ -28,7 +28,7 @@ module.exports = class Online extends Command{
 			let embed = new Discord.RichEmbed()
 				.setTitle("Онлайн на сервере VimeWorld MiniGames")
 				.setColor(client.vime.color)
-				.setDescription(`Полный онлайн: ${x.total}\n\n${onGames.map(c => `\tОнлайн ${c == "lobby" ? "в" : "на"} ${c !== "lobby" ? games.find(g => g.id.toLowerCase() == c).name : "Lobby"}: ${x.separated[c] || "0"}`).join("\n")}`);
+				.setDescription(`Полный онлайн: ${x.total}\n\n${onGames.map(c => `\tОнлайн в ${c !== "lobby" ? games.find(g => g.id.toLowerCase() == c).name : "Lobby"}: ${x.separated[c] || "0"}`).join("\n")}`);
 			responder.embed(embed).send();
 		}).catch(e => {
 			logger.error(e);

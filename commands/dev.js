@@ -23,7 +23,7 @@ module.exports = class Online extends Command{
 			return responder.send(evaled.replace(token_regexp, "[чел тв]").slice(0, 2000));
 		}catch(e){
 			console.log(e);
-			return responder.format('code:js').send(e.stack);
+			return responder.format("code:js").send(e.stack);
 		}
 	}
 };

@@ -20,14 +20,14 @@ module.exports = class UserStat extends Command {
 		client.vime.getUsersbyName(args.nickname.split(",")[0]).then(async x => {
 			if (!x.length) return responder.error("Пользователь не найден");
 			let user = x[0];
-			const time = client.timeObj(user.playedSeconds * 1000),
+			const time = Utils.timeObj(user.playedSeconds * 1000),
 				userEmbed = new Discord.RichEmbed()
 					.setColor(`#${client.vime.returnReadable(user.rank).color || client.vime.color}`)
 					.setTitle(`Статистика игрока ${Discord.Util.escapeMarkdown(user.username)}`)
 					.setThumbnail(`https://skin.vimeworld.ru/body/${user.username}.png`)
 					.setDescription(`ID: ${user.id}\nУровень: ${user.level || "0"}\nТекущий прогресс уровня: ${(user.levelPercentage * 100).toFixed(2)}%\n` +
                 `Ранк: ${client.vime.returnReadable(user.rank).rank}\n` +
-                `Сыграно в сумме:${time.days ? ` ${time.days} ${client.declOfNum(time.days, ["день", "дня", "дней"])}` : ""}${time.hours ? ` ${time.hours} ${client.declOfNum(time.hours, ["час", "часа", "часов"])}` : ""}${time.minutes ? ` ${time.minutes} ${client.declOfNum(time.minutes, ["минута", "минуты", "минут"])}` : ""}${time.seconds ? ` ${time.seconds} ${client.declOfNum(time.seconds, ["секунда", "секунды", "секунд"])}` : ""}` +
+                `Сыграно в сумме:${time.days ? ` ${time.days} ${Utils.declOfNum(time.days, ["день", "дня", "дней"])}` : ""}${time.hours ? ` ${time.hours} ${Utils.declOfNum(time.hours, ["час", "часа", "часов"])}` : ""}${time.minutes ? ` ${time.minutes} ${Utils.declOfNum(time.minutes, ["минута", "минуты", "минут"])}` : ""}${time.seconds ? ` ${time.seconds} ${Utils.declOfNum(time.seconds, ["секунда", "секунды", "секунд"])}` : ""}` +
                 (user.lastSeen > 0 ? `\nЗаходил(а) в последний раз: ${moment.utc(user.lastSeen * 1000).format("LLLL")} (${moment.utc(user.lastSeen * 1000).fromNow()})` : "") +
                 (user.guild ? `\nГильдия: ${user.guild.name}` : ""));
 			const pages = [userEmbed];

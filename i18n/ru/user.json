@@ -1,8 +1,4 @@
 {
-    "help": {
-        "description": "Показывает статистику игрока",
-        "example": "bit0r1n --games"
-    },
     "kills": "Убийств: {{kills}}",
     "games": "Сыграно игр: {{games}}",
     "wins": "Выиграно игр: {{wins}}",

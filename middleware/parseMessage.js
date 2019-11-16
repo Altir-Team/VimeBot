@@ -1,17 +1,27 @@
 module.exports = {
 	name: "parseMessage",
-	priority: 10,
+	priority: 2,
 	process: container => {
-		const { msg, commands } = container;
-		for (const prefix of commands.prefixes.keys()) {
-			if (!msg.content.startsWith(prefix)) continue;
-			const rawArgs = msg.content.substring(prefix.length).split(" ");
-			container.trigger = rawArgs[0].toLowerCase();
-			container.isCommand = commands.has(container.trigger);
-			container.rawArgs = rawArgs.slice(1).filter(v => v);
-			container.settings = { lang: "ru", prefix };
-			return Promise.resolve(container);
+		const { client, msg, commands } = container;
+		container.isPrivate = !msg.guild;
+
+		let data = client.db.prepare("SELECT prefix FROM guilds WHERE id = ?").all(msg.guild.id);
+		if (!data.length) client.db.prepare("INSERT INTO guilds (id) VALUES (?)").run(msg.guild.id);
+		data = client.db.prepare("SELECT prefix FROM guilds WHERE id = ?").all(msg.guild.id);
+
+		const prefix = data[0].prefix || client.prefix;
+
+		if (!msg.content.startsWith(prefix)) {
+			return Promise.resolve();
 		}
-		return Promise.resolve();
+
+		const rawArgs = msg.content.substring(prefix.length).split(" ");
+		const trigger = container.trigger = rawArgs[0].toLowerCase();
+		container.isCommand = commands.has(trigger);
+		container.rawArgs = rawArgs.slice(1).filter(v => !!v);
+
+		container.settings = { lang: "ru", prefix };
+
+		return Promise.resolve(container);
 	}
 };

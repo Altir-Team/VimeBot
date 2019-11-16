@@ -80,6 +80,30 @@ module.exports = class Utils {
 			"&f": "FFFFFF"
 		};
 	}
+	static declOfNum (number, titles) {
+		const n = Math.abs(number) % 100;
+		const n1 = n % 10;
+		if (n > 10 && n < 20) { return titles[2]; }
+		if (n1 > 1 && n1 < 5) { return titles[1]; }
+		if (n1 == 1) { return titles[0]; }
+		return titles[2];
+	}
+	static timeObj (milliseconds) {
+		const days, hours, minutes, seconds;
+		seconds = Math.floor(milliseconds / 1000);
+		minutes = Math.floor(seconds / 60);
+		seconds = seconds % 60;
+		hours = Math.floor(minutes / 60);
+		minutes = minutes % 60;
+		days = Math.floor(hours / 24);
+		hours = hours % 24;
+		return {
+			days,
+			hours,
+			minutes,
+			seconds
+		};
+	}
 };
 Number.prototype.isFloat = function() {
 	return this % 1 === 0;
