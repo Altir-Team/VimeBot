@@ -29,7 +29,7 @@ module.exports = class Help extends Command {
 			data.push(`**Полный вид команды:** \`${this.resolver.getUsage(command.usage, { prefix: client.prefix, command: command.name }, command.flags)}\``);
 			if (command.subcommands.size) {
 				command.subcommands.map(x => {
-					const sub = [`> Подкоманда ${x.name.split(" ")[1]}`, `Описание: ${x.description ? x.description : "Описание куда-то пропало.."}`];
+					const sub = [`> Подкоманда \`${x.name.split(" ")[1]}\``, `Описание: ${x.description ? x.description : "Описание куда-то пропало.."}`];
 					if (x.usage.length) sub.push(`Аргументы: ${x.usage.map(c => `${c.displayName} (${(c.type ? [c.type] : c.types).join(", ")})${c.last ? " //Принимает все слова" : ""}`).join("; ")}`);
 					if (x.flags.length) sub.push(`Флаги: ${x.flags.map(c => `${c.name} ${c.options ? `(${c.types.join(",")}) ` : ""}- ${c.description ? c.description : "Описание куда-то пропало..."}`).join("; ")}`);
 					if (x.options.permissions) sub.push(`Необходимые права для запуска: ${x.options.permissions.map(c => utils.perms[c])}`);
