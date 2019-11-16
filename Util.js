@@ -89,7 +89,7 @@ module.exports = class Utils {
 		return titles[2];
 	}
 	static timeObj (milliseconds) {
-		const days, hours, minutes, seconds;
+		let days, hours, minutes, seconds;
 		seconds = Math.floor(milliseconds / 1000);
 		minutes = Math.floor(seconds / 60);
 		seconds = seconds % 60;
