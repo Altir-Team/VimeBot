@@ -1,83 +1,121 @@
+const { ReactionCollector } = require('../');
 /**
  * Utils class
  */
 module.exports = class Utils {
 	/**
      * Creates reaction menu
-     * @param {Object} message Discord.js message object
-     * @param {Array} pages Array of pages
+     * @param {Object} message Message object
+     * @param {Array<Object|String>} pages Array of pages
      * @param {Object} [options] Menu options 
      * @param {Boolean} [options.agree] Add agree reaction to menu, if it pressed - returns page and index of page
      * @param {Function} [options.mapFunc] Map (change display view) array of pages
      * @param {Boolean} [options.fast] Add fast arrows reactions
      */
 	static reactionMenu(message, pages = [], options = {}) {
-		const { agree = false, mapFunc = x => x, fast = false } = options;
+        const {agree = false, mapFunc = (x) => x, fast = false} = options;
+        const getMessage = (content) => {
+            const obj = { content: '', embed: {} };
+            switch (typeof content) {
+            case 'string':
+                return { content };
+            case 'object':
+                if (content.title || content.type ||
+                    content.description || content.url ||
+                    content.timestamp || content.color ||
+                    content.footer || content.image ||
+                    content.thumbnail || content.video ||
+                    content.provider || content.author ||
+                    content.fields) obj.embed = content;
+                if (content.content) obj.content = content.content;
+                if (content.embed) obj.embed = content.embed;
+                return obj;
+            }
+        };
 		return new Promise(async (resolve) => { // eslint-disable-line
-			let contents = pages.map(mapFunc),
-				msg = await message.channel.send(contents[0]),
-				page = 0;
-			if(contents.length <= 1) return resolve([pages[0], 0]);
-			if(fast) await msg.react("⏮");
-			await msg.react("◀");
-			if(agree) await msg.react("✅");
-			await msg.react("▶");
-			if(fast) await msg.react("⏭");
-			await msg.react("⏹");
-			let collector = msg.createReactionCollector((rec, user) => ["◀", "▶", "⏹"].concat(agree ? "✅" : [], fast ? ["⏮", "⏭"] : []) && user.id == message.author.id);
-			collector.on("collect", (some) => {
-				some._emoji.reaction.users.filter(x => x.id !== msg.author.id).map(x => some._emoji.reaction.remove(x).catch(() => {}));
-				if(some._emoji.name == "◀"){
-					if(page == 0) return;
-					page--;
-					msg.edit(contents[page]);
-				}
-				if(some._emoji.name == "▶"){
-					if(page == contents.length - 1) return;
-					page++;
-					msg.edit(contents[page]);
-				}
-				if(agree && some._emoji.name == "✅") {
-					collector.stop();
-					return resolve([pages[page], page]);
-				}
-				if(some._emoji.name == "⏹") {
-					collector.stop();
-					return resolve([]);
-				}
-				if(fast && some._emoji.name == "⏮") {
-					page = 0;
-					msg.edit(contents[page]);
-				}
-				if(fast && some._emoji.name == "⏭") {
-					page = pages.length - 1;
-					msg.edit(contents[page]);
-				}
-			});
-			collector.on("end", () => {
-				collector.removeListener("collect", () => {});
-				collector.removeListener("end", () => {});
-				msg.clearReactions().catch(() => {});
-			});
-		});
-	}
+			const contents = pages.map(mapFunc);
+            const msg = await message._client.createMessage(message.channel.id, getMessage(contents[0]));
+            let page = 0;
+            if (message.channel.guild && !message.channel.permissionsOf(message._client.user.id).has('addReactions')) return resolve([pages[0], 0]);
+            if (contents.length <= 1) return resolve([pages[0], 0]);
+            if (fast) await msg.addReaction('⏮');
+            await msg.addReaction('◀');
+            if (agree) await msg.addReaction('✅');
+            await msg.addReaction('▶');
+            if (fast) await msg.addReaction('⏭');
+            await msg.addReaction('⏹');
+            const collector = new ReactionCollector(msg, (_, emoji, userID) => ['◀', '▶', '⏹'].concat(agree ? '✅' : [], fast ? ['⏮', '⏭'] : []).includes(emoji.name) && userID == message.author.id);
+            const edit = () => msg.edit(getMessage(contents[page]));
+            collector.on('collect', (_, emoji) => {
+                if (emoji.name == '◀') {
+                    if (page == 0) return;
+                    page--;
+                    edit();
+                }
+                if (emoji.name == '▶') {
+                    if (page == contents.length - 1) return;
+                    page++;
+                    edit();
+                }
+                if (agree && emoji.name == '✅') {
+                    collector.stop();
+                    return resolve([pages[page], page]);
+                }
+                if (emoji.name == '⏹') {
+                    collector.stop();
+                    return resolve([]);
+                }
+                if (fast && emoji.name == '⏮') {
+                    page = 0;
+                    edit();
+                }
+                if (fast && emoji.name == '⏭') {
+                    page = pages.length - 1;
+                    edit();
+                }
+            });
+            collector.on('remove', (_, emoji) => {
+                if (emoji.name == '◀') {
+                    if (page == 0) return;
+                    page--;
+                    edit();
+                }
+                if (emoji.name == '▶') {
+                    if (page == contents.length - 1) return;
+                    page++;
+                    edit();
+                }
+                if (fast && emoji.name == '⏮') {
+                    page = 0;
+                    edit();
+                }
+                if (fast && emoji.name == '⏭') {
+                    page = pages.length - 1;
+                    edit();
+                }
+            });
+            collector.on('end', () => {
+                msg.removeReactions().catch(() => {});
+            });
+        });
+    }
 	static get colors() {
 		return {
-			"&0": "000000",
-			"&1": "0000AA",
-			"&2": "00AA00",
-			"&3": "00AAAA",
-			"&4": "AA0000",
-			"&5": "AA00AA",
-			"&6": "FFAA00",
-			"&7": "AAAAAA",
-			"&8": "555555",
-			"&a": "55FF55",
-			"&b": "55FFFF",
-			"&c": "FF5555",
-			"&d": "FF55FF",
-			"&e": "FFFF55",
-			"&f": "FFFFFF"
+			"&0": 0x000000,
+			"&1": 0x0000AA,
+			"&2": 0x00AA00,
+			"&3": 0x00AAAA,
+			"&4": 0xAA0000,
+			"&5": 0xAA00AA,
+			"&6": 0xFFAA00,
+			"&7": 0xAAAAAA,
+			"&8": 0x555555,
+			"&a": 0x55FF55,
+			"&b": 0x55FFFF,
+			"&c": 0xFF5555,
+			"&d": 0xFF55FF,
+			"&e": 0xFFFF55,
+			"&f": 0xFFFFFF
 		};
 	}
 	static declOfNum (number, titles) {
@@ -103,22 +141,19 @@ module.exports = class Utils {
 			minutes,
 			seconds
 		};
-	}
+    }
+    static applyDescription (array, { mapFunc = (x) => x, separator = ', ' }) {
+        do {
+            array.pop();
+        } while (array.map(mapFunc).join(separator) > 2048)
+        return array;
+    }
 };
 Number.prototype.isFloat = function() {
 	return this % 1 === 0;
 };
 Array.prototype.random = function() {
 	return this[Math.floor(Math.random() * this.length)];
-};
-Array.prototype.batch = function(size) {
-	if(!size || size == 0 ||isNaN(Number(size))) size = 5;
-	let result = Array(Math.ceil(this.length / size));
-	for (let i = 0; i < result.length; i++) {
-		const begin = i*size;
-		result[i] = this.slice(begin, begin + size);
-	}
-	return result;
 };
 String.prototype.trunc = String.prototype.trunc ||
 function(n) {

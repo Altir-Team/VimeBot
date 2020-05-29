@@ -1,17 +1,12 @@
 {
-  "name": "dj.s",
-  "version": "0.3.3",
+  "name": "vimebot",
+  "version": "0.5.0",
   "description": "Бот, который получает информацию о чем-либо с Minecraft сервера VimeWorld MiniGames",
   "main": "index.js",
   "dependencies": {
-    "bluebird": "^3.5.5",
-    "discord.js": "^11.5.1",
+    "better-sqlite3": "^7.0.1",
     "dotenv-safe": "^8.2.0",
-    "eventemitter3": "^4.0.0",
-    "moment": "^2.24.0",
-    "moment-duration-format": "^2.3.2",
-    "node-fetch": "^2.6.0",
-    "vimelib": "^1.0.4"
+    "moment": "^2.24.0"
   },
   "author": "bit0r1n",
   "license": "ISC"

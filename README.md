@@ -21,5 +21,7 @@
 
 Используется
 * Приватный фреймворк
-* [Библиотека для создания WS соединения с Discord](https://discord.js.org)
+* [Библиотека для создания WS соединения с Discord](https://abal.moe/Eris)
 * [Библиотека для обработки вида времени](https://momentjs.com)
+* [Библиотека для синхронной работы с SQLite3 базой данных](https://github.com/JoshuaWise/better-sqlite3)
+* [Библиотека для установки параметров среды](https://github.com/rolodato/dotenv-safe)
