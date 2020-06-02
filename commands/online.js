@@ -5,13 +5,13 @@ module.exports = class Online extends Command {
 			name: "online",
 			aliases: ["онлайн"],
 			description: "Показывает онлайн на сервере и всех мини-играх",
-			flags: [{ name: "staff", description: "Список онлайн модераторов на сервере" }],
+			flags: [{ name: "s", description: "Список онлайн модераторов на сервере" }],
 			group: "Статистика",
 			options: { botPerms: ['embedLinks'] }
 		});
 	}
 	async handle ({ client, flags, plugins }, responder) {
-		if (flags.staff) {
+		if (flags.s) {
 			try {
 				const online = await plugins.get('vimeworld').getOnline('staff');
 				return await responder.embed({

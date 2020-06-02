@@ -7,8 +7,8 @@ module.exports = class UserStat extends Command {
 			name: "user",
 			aliases: ["userstat", "юзер", "пользователь"],
 			usage: [{ name: "nickname" }],
-			flags: [{ name: "games", description: "Статистика со всех мини-игр" },
-				{ name: "achievements", description: "Полный список полученных достижений" }],
+			flags: [{ name: "g", description: "Статистика со всех мини-игр" },
+				{ name: "a", description: "Полный список полученных достижений" }],
 			group: "Статистика",
 			description: "Показывает статистику игрока",
 			options: { localeKey: "user", botPerms: ['embedLinks'] }
@@ -31,7 +31,7 @@ module.exports = class UserStat extends Command {
                 (user.lastSeen > 0 ? `\nЗаходил(а) в последний раз: ${utc(user.lastSeen * 1000).format("LLLL")} (${utc(user.lastSeen * 1000).fromNow()})` : "") +
                 (user.guild ? `\nГильдия: ${user.guild.name}` : "")
 			});
-			if (flags.games) {
+			if (flags.g) {
 				const { stats } = await plugins.get('vimeworld').getUserStats(user.id);
 				const games = client.vimeGames;
 				const { t } = responder;
@@ -47,7 +47,7 @@ module.exports = class UserStat extends Command {
 					});
 				});
 			}
-			if (flags.achievements) {
+			if (flags.a) {
 				const { achievements } = await plugins.get('vimeworld').getUserAchievements(user.id);
 				const { vimeAchievements } = client;
 				const categories = Reflect.ownKeys(vimeAchievements);
