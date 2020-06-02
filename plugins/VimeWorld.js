@@ -163,6 +163,7 @@ module.exports = class VimeWorld {
     }
     /**
     * Получение официальной локализации с сервера VimeWorld
+    * @returns {Promise<Object>}
     */
     async getLocales (lang = 'ru') {
         return await this._request('locale/' + lang);

@@ -14,7 +14,7 @@ module.exports = class UserStat extends Command {
 			options: { localeKey: "user", botPerms: ['embedLinks'] }
 		});
 	}
-	async handle({ msg, args, flags, client, logger, plugins }, responder) {
+	async handle({ msg, args, flags, client, plugins }, responder) {
 		locale("ru");
 		try {
 			const [user] = await plugins.get('vimeworld').getUser(args.nickname.split(',')[0]);

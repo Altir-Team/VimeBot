@@ -8,7 +8,7 @@ module.exports = class Help extends Command {
 			description: "Показывает список команд или полное описание команды"
 		});
 	}
-	handle ({ args, commands, client, settings }, responder) {
+	handle ({ args, commands, settings }, responder) {
 		const { command } = args;
 		if (!command) {
 			const categories = commands.filter(x => !x.options.adminOnly).map(x => x.group).reduce((a, b) => {
