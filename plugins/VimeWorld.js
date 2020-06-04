@@ -60,7 +60,7 @@ module.exports = class VimeWorld {
         }
         opts.length = 50;
         opts = opts.filter(x => !!x);
-        return await this._request(path.replace(':opt', opts.map(x => encodeURIComponent(x)).join(',')));
+        return await this._request(path.replace(':opt', opts.map(x => encodeURIComponent(typeof x == 'string' ? x.split(',')[0] : x)).join(',')));
     }
     /**
      * Получение статистики игрока

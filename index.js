@@ -33,7 +33,13 @@ bot.plugins.get('vimeworld').getAchievements().then(async x => {
 	bot.vimeColor = 0x3498db;
 
 	bot.db = new SQLite("bot.db");
-	bot.db.prepare("CREATE TABLE IF NOT EXISTS guilds (id INTEGER UNIQUE NOT NULL, prefix TEXT DEFAULT NULL)").run();
+	bot.db.prepare("CREATE TABLE IF NOT EXISTS guilds (id TEXT UNIQUE NOT NULL, prefix TEXT DEFAULT NULL)").run();
+	bot.db.prepare(`CREATE TABLE IF NOT EXISTS links (
+		user TEXT UNIQUE NOT NULL,
+		vime INTEGER UNIQUE,
+		linkTime INTEGER NOT NULL
+		);
+	`).run();
 
 	await bot.run();
 

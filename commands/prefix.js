@@ -8,12 +8,10 @@ module.exports = class Prefix extends Command {
 			subcommands: {
 				change: {
 					usage: [{name: "prefix", min: 1, max: 4, type: "string"}],
-					description: "Сменить дополнительный префикс бота",
-					options: {modOnly: true, guildOnly: true},
+					options: {modOnly: true, guildOnly: true, description: "Сменить дополнительный префикс бота"},
 				},
 				reset: {
-					description: "Убрать дополнительный префикс бота",
-					options: {modOnly: true, guildOnly: true},
+					options: {modOnly: true, guildOnly: true, description: "Убрать дополнительный префикс бота"},
 				}
 			},
 			group: "Настройка",

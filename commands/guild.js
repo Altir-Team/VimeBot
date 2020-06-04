@@ -6,17 +6,33 @@ module.exports = class Guild extends Command {
 		super (...args, {
 			name: "guild",
 			aliases: ["гильдия", "гилд"],
-			usage: [{ name: "query", min: 2 }],
+			usage: [{ name: "query", min: 2, optional: true }],
 			group: "Статистика",
 			description: "Ищет гильдии по запросу. При выборе гильдии показывает его полную статистику",
 			options: { botPerms: ['embedLinks'] }
 		});
 	}
-	async handle({ msg, args, plugins }, responder) {
+	async handle({ msg, args, plugins, settings }, responder) {
 		try {
-			const guilds = await plugins.get('vimeworld').searchGuild(args.query);
-			const [guild] = await responder.selection(guilds, { exit: () => {}, mapFunc: g => `${g.name} (${g.tag ? `Тег: ${g.tag}, ` : ""}Уровень: ${g.level}, ID: ${g.id})`, title: "Выбор гильдии для просмотра подробной информации по ней" })
-			const guildData = await plugins.get('vimeworld').fetchGuild(guild.id);
+			let user;
+			if (settings.vimeAccount) {
+				try {
+					const u = await plugins.get('vimeworld').getUser(settings.vimeAccount);
+					if (u.guild) user = u;
+				} catch {}
+			}
+			if (!user && !args.query) return responder.error('{{%errors.CORRECT_USAGE}}\n' +
+			`{{%errors.FULL_DESC}}: \`{{%errors.INSUFFICIENT_ARGS}}\``,
+				  { usage: this.resolver.getUsage(this.usage,
+					{prefix: settings.prefix, command: this.triggers[0]},
+					this.flags) });
+			let guildData;
+			if (user?.guild) guildData = await plugins.get('vimeworld').fetchGuild(user.guild.id);
+			else {
+				const guilds = await plugins.get('vimeworld').searchGuild(args.query);
+				const [guild] = await responder.selection(guilds, { exit: () => {}, mapFunc: g => `${g.name} (${g.tag ? `Тег: ${g.tag}, ` : ""}Уровень: ${g.level}, ID: ${g.id})`, title: "Выбор гильдии для просмотра подробной информации по ней" })
+				guildData = await plugins.get('vimeworld').fetchGuild(guild.id);
+			}
 			moment.locale("ru");
 			const pages = [];
 			pages.push({

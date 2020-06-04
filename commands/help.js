@@ -28,11 +28,11 @@ module.exports = class Help extends Command {
 			if (command.flags.length) data.push(`**Флаги:** ${command.flags.map(x => `\`${x.name} ${x.option ? `(${x.types.join(", ")}) ` : "" }- ${x.description ? x.description : "Описание куда-то пропало..."}\``).join("; ")}`);
 			data.push(`**Полный вид использования:** \`${this.resolver.getUsage(command.usage, { prefix: settings.prefix, command: command.name }, command.flags)}\``);
 			for (const [_, subcommand] of command.subcommands) {
-				const sub = [`> Подкоманда \`${subcommand.name}\``, `\tОписание: ${subcommand.description || "Описание куда-то пропало.."}`];
-				if (subcommand.usage.length) sub.push(`\tАргументы: ${subcommand.usage.map(c => `${c.displayName || c.name} (${(c.type ? [c.type] : c.types).join(", ")})${c.last ? " //Принимает все слова" : ""}`).join("; ")}`);
+				const sub = [`> Подкоманда \`${subcommand.name}\``, `\tОписание: ${subcommand.options.description || "Описание куда-то пропало.."}`];
+				if (subcommand.usage.length) sub.push(`\tАргументы: ${subcommand.usage.map(c => `${c.displayName || c.name} (${c.types.join(", ")})${c.last ? " //Принимает все слова" : ""}`).join("; ")}`);
 				if (subcommand.flags.length) sub.push(`\tФлаги: ${subcommand.flags.map(c => `${c.name} ${c.options ? `(${c.types.join(",")}) ` : ""}- ${c.description || "Описание куда-то пропало..."}`).join("; ")}`);
 				if (subcommand.options.permissions) sub.push(`\tНеобходимые права для запуска: ${subcommand.options.permissions.map(c => utils.perms[c])}`);
-				sub.push(`\t**Полный вид использования:** \`${this.resolver.getUsage(subcommand.usage, { prefix: settings.prefix, command: subcommand.name }, subcommand.flags)}\``)
+				sub.push(`\t**Полный вид использования:** \`${this.resolver.getUsage(subcommand.usage, { prefix: settings.prefix, command: command.name + ' ' + subcommand.name }, subcommand.flags)}\``)
 				data.push(sub.join("\n"));
 			}
 			responder.format("emoji").send(data.join("\n"));

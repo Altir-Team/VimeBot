@@ -6,7 +6,7 @@ module.exports = class UserStat extends Command {
 		super (...args, {
 			name: "user",
 			aliases: ["userstat", "юзер", "пользователь"],
-			usage: [{ name: "nickname" }],
+			usage: [{ name: "nickname", optional: true }],
 			flags: [{ name: "g", description: "Статистика со всех мини-игр" },
 				{ name: "a", description: "Полный список полученных достижений" }],
 			group: "Статистика",
@@ -14,10 +14,15 @@ module.exports = class UserStat extends Command {
 			options: { localeKey: "user", botPerms: ['embedLinks'] }
 		});
 	}
-	async handle({ msg, args, flags, client, plugins }, responder) {
+	async handle({ msg, args, flags, client, plugins, settings }, responder) {
 		locale("ru");
 		try {
-			const [user] = await plugins.get('vimeworld').getUser(args.nickname.split(',')[0]);
+			if (!settings.vimeUser && !args.nickname) return responder.error('{{%errors.CORRECT_USAGE}}\n' +
+			`{{%errors.FULL_DESC}}: \`{{%errors.INSUFFICIENT_ARGS}}\``,
+				  { usage: this.resolver.getUsage(this.usage,
+					{prefix: settings.prefix, command: this.triggers[0]},
+					this.flags) });
+			const [user] = await plugins.get('vimeworld').getUser(args.nickname || settings.vimeAccount);
 			if (!user) return await responder.error("Пользователь не найден");
 			const pages = [];
 			const time = timeObj(user.playedSeconds * 1000);
