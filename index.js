@@ -2,6 +2,7 @@ require("dotenv-safe").config();
 const Client = require("../");
 const SQLite = require("better-sqlite3");
 const VimeWorldPlugin = require('./plugins/VimeWorld');
+const StatPosterPlugin = require('./plugins/StatPoster');
 const bot = new Client({
 	token: process.env.TOKEN,
 	locales: 'i18n',
@@ -10,9 +11,14 @@ const bot = new Client({
 	prefix: process.env.PREFIX
 });
 
+!require('fs').statSync('lists.json') && require('fs').writeFileSync('lists.json', '[]');
+
+
 bot.unregister("middleware", true)
 bot.register("middleware", "middleware");
 bot.createPlugin('vimeworld', VimeWorldPlugin, process.env.VMTOKEN);
+bot.createPlugin('statposter', StatPosterPlugin);
+bot.register('statposter', require('./lists.json'));
 
 bot.plugins.get('vimeworld').getAchievements().then(async x => {
 	bot.vimeAchievements = x;
