@@ -1,5 +1,6 @@
 {
 	"DESCRIPTION": "Привязка VimeWorld аккаунта к вашему Discord аккаунту",
+	"ARGS_NICKNAME": "никнейм",
 	"USAGE_1": "link bit0r1n",
 	"EXPLANATION_1": "привязывает аккаунт \"bit0r1n\" к вашему Discord аккаунту",
 	"USAGE_2": "link reset",

@@ -1,5 +1,6 @@
 {
 	"DESCRIPTION": "Показывает список команд или полное описание команды",
+	"ARGS_COMMAND": "команда",
 	"USAGE_1": "help",
 	"EXPLANATION_1": "показ списка всех команд",
 	"USAGE_2": "help user",

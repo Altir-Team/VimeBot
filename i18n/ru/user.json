@@ -1,5 +1,6 @@
 {
 	"DESCRIPTION": "Показывает статистику игрока",
+	"ARGS_NICKNAME": "запрос",
 	"FLAG_G_DESCRIPTION": "Статистика со всех мини-игр",
 	"FLAG_A_DESCRIPTION": "Полный список полученных достижений",
 	"USAGE_1": "user bit0r1n",
