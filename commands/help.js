@@ -31,7 +31,7 @@ module.exports = class Help extends Command {
 			data.push(t('{{COMMAND_FULL_USAGE}}', [t(this.resolver.getUsage(command.usage, { prefix: settings.prefix, command: command.name }, command.flags))]));
 			for (const [_, subcommand] of command.subcommands) {
 				const sub = [t('> {{SUBCOMMAND}}', [subcommand.name])];
-				if (subcommand.options.description) data.push(t('\t{{COMMAND_DESCRIPTION}}', [subcommand.options.description]));
+				if (subcommand.options.description) sub.push(t('\t{{COMMAND_DESCRIPTION}}', [subcommand.options.description]));
 				if (subcommand.usage.length) sub.push(t('\t{{COMMAND_ARGS}}', [subcommand.usage.map(c => `${c.displayName || c.name} (${c.types.join(", ")})${c.last ? ' ' + t('{{COMMAND_ARG_ALL_WORDS}}') : ''}`).join("; ")]));
 				if (subcommand.flags.length) sub.push(t('\t{{COMMAND_FLAGS}}', [subcommand.flags.map(c => `${c.name} ${c.options ? `(${c.types.join(",")}) ` : ''}- ${c.description || t('{{COMMAND_DESCRIPTION_NOT_FOUND}}')}`).join("; ")]));
 				if (subcommand.options.permissions) sub.push(t('\t{{COMMAND_PERMISSIONS}}', [subcommand.options.permissions.map(c => utils.perms[c])]));
