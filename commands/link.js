@@ -24,9 +24,9 @@ module.exports = class Link extends Command {
         const { ans } = await responder.format('emoji:link').dialog([{ prompt: '{{PROMPT}}', input: { name: 'ans', type: 'string', choices: [yes, no] }, ...vimeUser, yes, no }]);
         if (ans == yes) {
             client.db.prepare('INSERT OR REPLACE INTO links (user, vime, linkTime) VALUES (?, ?, ?)').run(msg.author.id, vimeUser.id, Date.now());
-            return responder.success('LINK_SUCCESSFULL', [vimeUser.username]);
+            return responder.success('{{LINK_SUCCESSFULL}}', [vimeUser.username]);
         } else {
-            return responder.format('emoji:').reply('LINK_REFUSED', [vimeUser.username]);
+            return responder.format('emoji:').reply('{{LINK_REFUSED}}', [vimeUser.username]);
         }
     }
     reset ({ msg, settings, client }, responder) {
