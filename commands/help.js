@@ -25,10 +25,10 @@ module.exports = class Help extends Command {
 			const data = [t('{{COMMAND_INFO}}', [command.name])];
 			if (command.description) data.push(t('{{COMMAND_DESCRIPTION}}', [command.description]));
 			if (command.triggers.length - 1) data.push(t('{{COMMAND_ALIASES}}', [command.triggers.slice(1).map(x => `\`${x}\``).join(", ")]));
-			if (command.usage.length) data.push(t('{{COMMAND_ARGS}}', [command.usage.map(x => `\`${x.displayName} (${x.types.join(", ")})${x.last ? ' ' + t('{{COMMAND_ARG_ALL_WORDS}}') : ''}\``).join("; ")]));
+			if (command.usage.length) data.push(t('{{COMMAND_ARGS}}', [command.usage.map(x => `\`${t(x.displayName)} (${x.types.join(", ")})${x.last ? ' ' + t('{{COMMAND_ARG_ALL_WORDS}}') : ''}\``).join("; ")]));
 			if (command.options.permissions) data.push(t('{{COMMAND_PERMISSIONS}}', [command.options.permissions.map(x => utils.perms[x])]));
 			if (command.flags.length) data.push(t('{{COMMAND_FLAGS}}', [command.flags.map(x => `\`${x.name} ${x.option ? `(${x.types.join(", ")}) ` : ''}- ${x.description || t('{{COMMAND_DESCRIPTION_NOT_FOUND}}')}\``).join("; ")]));
-			data.push(t('{{COMMAND_FULL_USAGE}}', [this.resolver.getUsage(command.usage, { prefix: settings.prefix, command: command.name }, command.flags)]));
+			data.push(t('{{COMMAND_FULL_USAGE}}', [t(this.resolver.getUsage(command.usage, { prefix: settings.prefix, command: command.name }, command.flags))]));
 			for (const [_, subcommand] of command.subcommands) {
 				const sub = [t('> {{SUBCOMMAND}}', [subcommand.name])];
 				if (subcommand.options.description) data.push(t('\t{{COMMAND_DESCRIPTION}}', [subcommand.options.description]));
