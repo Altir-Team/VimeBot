@@ -1,0 +1,19 @@
+{
+	"DESCRIPTION": "Показывает список команд или полное описание команды",
+	"USAGE_1": "help",
+	"EXPLANATION_1": "показ списка всех команд",
+	"USAGE_2": "help user",
+	"EXPLANATION_2": "показ полной информации по команде \"user\"",
+	"COMMANDS_LIST": "список команд",
+	"COMMAND_INFO": "Информация по команде **{0}**",
+	"COMMAND_DESCRIPTION": "**Описание:** {0}",
+	"COMMAND_DESCRIPTION_NOT_FOUND": "Описание куда-то пропало...",
+	"COMMAND_ALIASES": "**Алиасы:** {0}",
+	"COMMAND_ARGS": "**Аргументы:** {0}",
+	"COMMAND_ARG_ALL_WORDS": "/Принимает все слова",
+	"COMMAND_PERMISSIONS": "**Необходимые права для запуска:** {0}",
+	"COMMAND_FLAGS": "**Флаги:** {0}",
+	"COMMAND_FULL_USAGE": "**Полный вид использования:** `{0}`",
+	"SUBCOMMAND": "Подкоманда `{0}`",
+	"USAGES": "Примеры использования"
+}

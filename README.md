@@ -11,13 +11,13 @@
 * Список стримеров, которые в данный момент стримят на VimeWorld MiniGames
 * Количество online игроков со всех игр (+список модераторов в online)
 * Привязка аккаунта VimeWorld к своему Discord аккаунту для быстрого доступа к статистике
+* Поддержка нескольких языков (помочь с переводом можно в разделе [Pull requests](https://github.com/Altir-Team/vimebot/pulls))
 
 > В планах
 * Лидерборды
-* Поддержка нескольких языков
 
 > Поддержка
-* Баги/предложения в разделе Issues
+* Баги/предложения в разделе [Issues](https://github.com/Altir-Team/vimebot/issues)
 * Связь: smth@altir.xyz или [Discord сервер](https://altir.xyz/smth/support)
 
 > Используется

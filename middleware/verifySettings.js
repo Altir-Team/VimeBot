@@ -6,8 +6,9 @@ module.exports = {
         container.settings = { lang: 'ru', prefix: client.prefix, vimeAccount: null };
         if (!isPrivate) {
             try {
-                const { prefix } = client.db.prepare('SELECT prefix FROM guilds WHERE id = ?').get(msg.channel.guild.id);
+                const { prefix, lang } = client.db.prepare('SELECT prefix FROM guilds WHERE id = ?').get(msg.channel.guild.id);
                 if (!!prefix) container.settings.prefix = prefix;
+                container.settings.lang = lang || 'ru';
             } catch {
                 client.db.prepare('INSERT INTO guilds (id) VALUES (?)').run(msg.channel.guild.id);
             }

@@ -1,0 +1,13 @@
+{
+	"DESCRIPTION": "Показывает онлайн на сервере и всех мини-играх",
+	"FLAG_S_DESCRIPTION": "Список онлайн модераторов на сервере",
+	"USAGE_1": "online",
+	"EXPLANATION_1": "показ списка с числом онлайн игроков",
+	"USAGE_2": "online -s",
+	"EXPLANATION_2": "показ списка модераторов, которые онлайн на сервере",
+	"STAFF_ONLINE_TITLE": "Список онлайн модераторов на сервере",
+	"STAFF_OFFLINE": "Никого нет в сети",
+	"PLAYERS_TITLE": "Онлайн на сервере VimeWorld MiniGames",
+	"PLAYERS_ONLINE_FULL": "Полный онлайн: {0}",
+	"PLAYERS_ONLINE_TYPE": "Онлайн в {0}: {1}"
+}

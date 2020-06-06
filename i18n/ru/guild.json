@@ -1,0 +1,22 @@
+{
+	"DESCRIPTION": "Ищет гильдии по запросу. При выборе гильдии показывает его полную статистику",
+	"USAGE_1": "guild f5",
+	"EXPLANATION_1": "производит поиск гильдий, у которых название схоже с \"f5\"",
+	"MAP_TAG": "Тег: ",
+	"MAP_LEVEL": "Уровень: ",
+	"SELECTOR_TITLE": "Выбор гильдии для просмотра подробной информации по ней",
+	"SELECTOR_ELEMENT_TAG": "{name} (Тег: {tag}, Уровень: {level}, ID: {id})",
+	"SELECTOR_ELEMENT_NO_TAG": "{name} (Уровень: {level}, ID: {id})",
+	"MAIN_INFO": {
+		"TITLE": "Основная информация",
+		"TAG_DESCRIPTION": "Тег: {tag}\nУровень: {level}\nПрогресс уровня: {percentage}%\nID: {id}\nКоличество монет: {coins}\nДата создания: {date}",
+		"NO_TAG_DESCRIPTION": "Уровень: {level}\nПрогресс уровня: {percentage}%\nID: {id}\nКоличество монет: {coins}\nДата создания: {date}"
+	},
+	"PERKS_INFO": {
+		"TITLE": "Улучшения",
+		"PERK_DESC": "**{name}**, `{level}` уровень"
+	},
+	"MEMBERS_INFO": {
+		"TITLE": "Участники"
+	}
+}

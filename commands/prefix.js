@@ -4,21 +4,22 @@ module.exports = class Prefix extends Command {
 		super(...args, {
 			name: "prefix",
 			aliases: ["префикс", "преф"],
-			description: "Показывает текущий префикс бота",
+			description: "{{@prefix.DESCRIPTION}}",
 			subcommands: {
 				change: {
-					usage: [{name: "prefix", min: 1, max: 4, type: "string"}],
-					options: {modOnly: true, guildOnly: true, description: "Сменить дополнительный префикс бота"},
+					usage: [{name: "prefix", min: 1, max: 4, type: "string", displayName: '{{@prefix.change.ARGS_PREFIX}}'}],
+					options: {modOnly: true, guildOnly: true, description: "{{@prefix.change.DESCRIPTION}}"},
 				},
 				reset: {
-					options: {modOnly: true, guildOnly: true, description: "Убрать дополнительный префикс бота"},
+					options: {modOnly: true, guildOnly: true, description: "{{@prefix.reset.DESCRIPTION}}"},
 				}
 			},
-			group: "Настройка",
+			group: "{{%CATEGORIES.CONFIGURATION}}",
+			options: { localeKey: 'prefix' }
 		});
 	}
-	handle({settings}, responder) {
-		return responder.format("emoji:info").reply(`Текущий префикс: \`${settings.prefix}\``);
+	handle({settings, client}, responder) {
+		return responder.format("emoji:info").reply(`{{${settings.prefix !== client.prefix ? 'CURRENT_PREFIX' : 'NOT_CONFIGURED'}}}`, [settings.prefix]);
 	}
 	change({msg, args, client}, responder) {
 		try {
@@ -26,13 +27,13 @@ module.exports = class Prefix extends Command {
 				return this.reset({msg, client}, responder);
 			}
 			client.db.prepare("UPDATE guilds SET prefix = ? WHERE id = ?").run(args.prefix, msg.channel.guild.id);
-			return responder.success(`Префикс успешно сменён на \`${args.prefix}\``);
+			return responder.success('{{change.SUCCESSFULL}}', [args.prefix]);
 		} catch {
 			return responder.error("{{%ERROR}}");
 		}
 	}
 	reset({msg, client}, responder) {
 		client.db.prepare("UPDATE guilds SET prefix = ? WHERE id = ?").run(null, msg.channel.guild.id);
-		return responder.success("Префикс успешно сброшен!");
+		return responder.success('{{reset.SUCCESSFULL}}');
 	}
 };

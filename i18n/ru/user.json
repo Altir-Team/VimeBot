@@ -1,1 +1,20 @@
-{"ann":{"kills":"Убийств","bowkills":"Убийств из лука","wood":"Срублено дерева","ores":"Руды выкопано","nexus":"Урона по базе","digged":"Земли выкопано"},"bb":{"games":"Игр","wins":"Побед"},"bp":{"games":"Игр","wins":"Побед","levels":"Пройдено уровней"},"bw":{"kills":"Убийств","deaths":"Смертей","games":"Игр","wins":"Побед","bedBreaked":"Кроватей сломано"},"cp":{"kills":"Убийств","deaths":"Смертей","games":"Игр","wins":"Побед","resourcePointsBreaked":"Точек рес. сломано"},"dr":{"games":"Игр","wins":"Побед"},"duels":{"solo_wins":"Одиночных побед","solo_games":"Одиночных игр","team_wins":"Командных побед","team_games":"Командных игр","ranked_games":"Рейтинговых игр","ranked_wins":"Рейтинговых побед","total_wins":"Всего побед","total_games":"Всего игр","wins_classic":"Побед Classic","wins_bow":"Побед на луках","wins_op":"Побед OP","wins_potion":"Побед на зельях","wins_uhc":"Побед UHC","wins_bwh":"Побед BWH","maxstrike":"Макс. побед подряд","rate":"Рейтинг","max_rate":"Макс. рейтинг"},"gg":{"kills":"Убийств","wins":"Побед","games":"Игр","levels":"Набрано уровней"},"hg":{"kills":"Убийств","wins":"Побед","games":"Игр"},"kpvp":{"kills":"Убийств","deaths":"Смертей","points":"Очков"},"mw":{"games":"Игр","wins":"Побед","mobsKilled":"Убито мобов","mobsSended":"Послано мобов","maxIncome":"Макс. доход"},"prison":{"total_blocks":"Всего блоков","earned_money":"Получено денег","kills":"Убийств","deaths":"Смертей","mobs":"Убит�� мобов","blocks":"Сломанные блоки"},"sw":{"wins":"Побед","games":"Игр","kills":"Убийств","deaths":"Смертей","arrowsFired":"Стрел выпущено","blocksBroken":"Блоков сломано","blocksPlaced":"Блоков поставлено","currentWinStreak":"Серия побед","winStreak":"Побед подряд"},"arc":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей"},"bridge":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей","points":"Очков"},"jumpleague":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей","checkpoints":"Чекпоинтов"},"murder":{"games":"Игр","total_wins":"Всего побед","wins_as_innocent":"Побед мирным","wins_as_maniac":"Побед маньяком","wins_as_detective":"Побед детективом","kills":"Убийств"},"paintball":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей"},"sheep":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей"},"turfwars":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей"},"tnttag":{"games":"Игр","wins":"Побед","kills":"Убийств"},"tntrun":{"games":"Игр","wins":"Побед","broken_blocks":"Блоков сломано"},"luckywars":{"games":"Игр","wins":"Побед","kills":"Убийств","deaths":"Смертей","lucky_blocks":"Сломано лаки блоков"}}
+{
+	"DESCRIPTION": "Показывает статистику игрока",
+	"FLAG_G_DESCRIPTION": "Статистика со всех мини-игр",
+	"FLAG_A_DESCRIPTION": "Полный список полученных достижений",
+	"USAGE_1": "user bit0r1n",
+	"EXPLANATION_1": "показ обычной статистики пользователя \"bit0r1n\"",
+	"USAGE_2": "user bit0r1n -g",
+	"EXPLANATION_2": "показ обычной статистики и так же со всех игр игрока \"bit0r1n\"",
+	"USAGE_3": "user bit0r1n -g -a",
+	"EXPLANATION_3": "показ обычной статистики, статистики с игр и всех достижений игрока \"bit0r1n\"",
+	"USER_NOT_FOUND": "игрок не найден",
+	"STATS_TITLE": "Статистика игрока {0}",
+	"STATS_DESCRIPTION": "ID: `{0}`\nУровень: `{1}`\nТекущий прогресс: `{2}%`\nРанк: `{3}`",
+	"STATS_LAST_SEEN": "Заходил в последний раз: `{4}`",
+	"STATS_GUILD": "Гильдия: `{5}`",
+	"GAMES_TITLE": "Статистика {0} игрока {1}",
+	"ACHIEVEMENTS_TITLE": "{0} достижения {1}",
+	"ACHIEVEMENT": "**{0}:** {1} (Награда: {2})",
+	"ACHIEVEMENT_COMPLETE": "Выполнено ✅"
+}

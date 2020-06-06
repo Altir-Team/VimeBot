@@ -19,6 +19,8 @@ bot.register("middleware", "middleware");
 bot.createPlugin('vimeworld', VimeWorldPlugin, process.env.VMTOKEN);
 bot.createPlugin('statposter', StatPosterPlugin);
 bot.register('statposter', require('./lists.json'));
+bot.plugins.get('i18n').matchRegexp = '{(.+)}';
+bot.plugins.get('i18n').defaultLang = 'ru';
 
 bot.plugins.get('vimeworld').getAchievements().then(async x => {
 	bot.vimeAchievements = x;
@@ -33,7 +35,7 @@ bot.plugins.get('vimeworld').getAchievements().then(async x => {
 	bot.vimeColor = 0x3498db;
 
 	bot.db = new SQLite("bot.db");
-	bot.db.prepare("CREATE TABLE IF NOT EXISTS guilds (id TEXT UNIQUE NOT NULL, prefix TEXT DEFAULT NULL)").run();
+	bot.db.prepare(`CREATE TABLE IF NOT EXISTS guilds (id TEXT UNIQUE NOT NULL, prefix TEXT DEFAULT NULL, lang TEXT DEFAULT "ru")`).run();
 	bot.db.prepare(`CREATE TABLE IF NOT EXISTS links (
 		user TEXT UNIQUE NOT NULL,
 		vime INTEGER UNIQUE,

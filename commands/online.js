@@ -1,26 +1,28 @@
 const { Command } = require("../../");
+const { applyDescription } = require('../Util');
 module.exports = class Online extends Command { 
 	constructor (...args) {
 		super (...args, {
 			name: "online",
 			aliases: ["онлайн"],
-			description: "Показывает онлайн на сервере и всех мини-играх",
-			flags: [{ name: "s", description: "Список онлайн модераторов на сервере" }],
-			group: "Статистика",
-			options: { botPerms: ['embedLinks'] }
+			description: "{{@online.DESCRIPTION}}",
+			flags: [{ name: "s", description: "{{@online.FLAG_S_DESCRIPTION}}" }],
+			group: "{{%CATEGORIES.STATISTIC}}",
+			options: { botPerms: ['embedLinks'], localeKey: 'online' }
 		});
 	}
 	async handle ({ client, flags, plugins }, responder) {
+		const { t } = responder;
 		if (flags.s) {
 			try {
 				const online = await plugins.get('vimeworld').getOnline('staff');
 				return await responder.embed({
-					title: 'Список онлайн модераторов на сервере',
+					title: t('{{STAFF_ONLINE_TITLE}}'),
 					color: client.vimeColor,
-					description: online.length ? online.map(x => x.username).join('\n') : 'Никого нет в сети'
+					description: online.length ? applyDescription(online, { mapFunc: x => `\`${x.username}\`` }) : t('{{STAFF_OFFLINE}}')
 				}).send();
 			} catch {
-				return await responder.error('Произошла ошибка. Попробуйте позже');
+				return await responder.error('{{%errors.VIME}}');
 			}
 		} else {
 			try {
@@ -28,12 +30,12 @@ module.exports = class Online extends Command {
 				const types = Object.keys(online.separated);
 				const { vimeGames } = client;
 				return await responder.embed({
-					title: 'Онлайн на сервере VimeWorld MiniGames',
+					title: t('{{PLAYERS_TITLE}}'),
 					color: client.vimeColor,
-					description: `Полный онлайн: ${online.total}\n\n${types.map(c => `\tОнлайн в ${c !== "lobby" ? vimeGames.find(g => g.id.toLowerCase() == c).name : "Lobby"}: ${online.separated[c] || "0"}`).join('\n')}`
+					description: t(`{{PLAYERS_ONLINE_FULL}}\n\n${types.map(c => t(`\t{{PLAYERS_ONLINE_TYPE}}`, [c !== "lobby" ? vimeGames.find(g => g.id.toLowerCase() == c).name : "Lobby", online.separated[c]])).join('\n')}`, [online.total])
 				}).send();
 			} catch {
-				return await responder.error("Произошла ошибка. Попробуйте позже");
+				return await responder.error("{{%errors.VIME}}");
 			}
 		}
 	}

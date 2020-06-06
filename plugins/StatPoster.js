@@ -6,7 +6,8 @@ module.exports = class StatPoster {
         this.interval = null;
     }
     register(lists) {
-        Promise.all(lists.map(x => this.lists.push(x))).then(() => this.runUpdates());
+        lists.forEach(x => this.lists.push(x))
+        this.runUpdates();
         return this;
     }
     runUpdates() {
@@ -15,7 +16,7 @@ module.exports = class StatPoster {
             const client = this._client;
             for (const botList of this.lists) {
                 const body = {};
-                Object.keys(botList.bodyVars).map(x => {
+                Object.keys(botList.bodyVars).forEach(x => {
                     body[x] = botList.bodyVars[x];
                 });
                 Promise.all(Object.keys(body).map(c => eval(body[c])))

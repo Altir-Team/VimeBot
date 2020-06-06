@@ -12,32 +12,30 @@ module.exports = class Streams extends Command {
 		super (...args, {
 			name: "streams",
 			aliases: ["стримы", "stream", "стрим"],
-			description: "Показывает список стримеров, которые сейчас стримят на VimeWorld",
-			group: "Информация",
+			description: "{{@streams.DESCRIPTION}}",
+			group: "{{%CATEGORIES.INFO}}",
 			options: { localeKey: "streams", botPerms: ['embedLinks'] }
 		});
 	}
-	async handle ({ msg, plugins }, responder) {
+	async handle ({ msg, plugins, settings }, responder) {
 		try {
 			const streams = await plugins.get('vimeworld').getOnline('streams');
-			if (!streams.length) return await responder.error("Сейчас никто не стримт на VimeWorld");
-			moment.locale("ru");
+			if (!streams.length) return await responder.error("{{NO_STREAMS}}");
+			moment.locale(settings.lang);
 			return reactionMenu(msg, streams.map(x => {
 				return {
 					author: {
-						name: x.author,
-						icon_url: platforms[x.platform],
+						name: x.owner,
+						icon_url: platforms[x.platform].icon,
 						url: x.url
 					},
 					color: platforms[x.platform].color,
 					title: x.title,
-					description: `**Зрителей:** ${x.viewers}\n
-					**Стрим начался:** ${moment(Date.now() - x.duration).fromNow()}\n
-					**Ник на сервере:** ${x.user.username}`
+					description: responder.t('{{STREAM_DESCRIPTION}}', [x.viewers, moment(Date.now() - (x.duration * 1000)).fromNow(), x.user.username])
 				}
 			}), { fast: true })
 		} catch {
-			return await responder.error("Произошла ошибка. Попробуйте позже");
+			return await responder.error("{{%errors.VIME}}");
 		}
 	}
 };

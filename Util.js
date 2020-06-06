@@ -32,18 +32,12 @@ module.exports = class Utils {
                 return obj;
             }
         };
-		return new Promise(async (resolve) => { // eslint-disable-line
-			const contents = pages.map(mapFunc);
-            const msg = await message._client.createMessage(message.channel.id, getMessage(contents[0]));
+		return new Promise(async (resolve) => {
+            const contents = pages.map(mapFunc);
+            const msg = await message.channel.createMessage(getMessage(contents[0]));
             let page = 0;
             if (message.channel.guild && !message.channel.permissionsOf(message._client.user.id).has('addReactions')) return resolve([pages[0], 0]);
             if (contents.length <= 1) return resolve([pages[0], 0]);
-            if (fast) await msg.addReaction('⏮');
-            await msg.addReaction('◀');
-            if (agree) await msg.addReaction('✅');
-            await msg.addReaction('▶');
-            if (fast) await msg.addReaction('⏭');
-            await msg.addReaction('⏹');
             const collector = new ReactionCollector(msg, (_, emoji, userID) => ['◀', '▶', '⏹'].concat(agree ? '✅' : [], fast ? ['⏮', '⏭'] : []).includes(emoji.name) && userID == message.author.id);
             const edit = () => msg.edit(getMessage(contents[page]));
             collector.on('collect', (_, emoji) => {
@@ -97,6 +91,12 @@ module.exports = class Utils {
             collector.on('end', () => {
                 msg.removeReactions().catch(() => {});
             });
+            if (fast) await msg.addReaction('⏮');
+            await msg.addReaction('◀');
+            if (agree) await msg.addReaction('✅');
+            await msg.addReaction('▶');
+            if (fast) await msg.addReaction('⏭');
+            await msg.addReaction('⏹');
         });
     }
 	static get colors() {
@@ -146,19 +146,6 @@ module.exports = class Utils {
         do {
             array.pop();
         } while (array.map(mapFunc).join(separator) > 2048)
-        return array;
+        return array.map(mapFunc).join(separator);
     }
-};
-Number.prototype.isFloat = function() {
-	return this % 1 === 0;
-};
-Array.prototype.random = function() {
-	return this[Math.floor(Math.random() * this.length)];
-};
-String.prototype.trunc = String.prototype.trunc ||
-function(n) {
-	return (this.length > n) ? this.substr(0, n - 1) + "..." : this;
-};
-String.prototype.capitalize = function() {
-	return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
 };

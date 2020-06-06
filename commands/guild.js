@@ -6,10 +6,10 @@ module.exports = class Guild extends Command {
 		super (...args, {
 			name: "guild",
 			aliases: ["гильдия", "гилд"],
-			usage: [{ name: "query", min: 2, optional: true }],
-			group: "Статистика",
-			description: "Ищет гильдии по запросу. При выборе гильдии показывает его полную статистику",
-			options: { botPerms: ['embedLinks'] }
+			usage: [{ name: "query", min: 2, optional: true, displayName: '{{@guild.ARGS_QUERY}}' }],
+			group: "{{%CATEGORIES.STATISTIC}}",
+			description: "{{@guild.DESCRIPTION}}",
+			options: { botPerms: ['embedLinks'], localeKey: 'guild' }
 		});
 	}
 	async handle({ msg, args, plugins, settings }, responder) {
@@ -26,41 +26,44 @@ module.exports = class Guild extends Command {
 				  { usage: this.resolver.getUsage(this.usage,
 					{prefix: settings.prefix, command: this.triggers[0]},
 					this.flags) });
+			const { t } = responder;
 			let guildData;
 			if (user?.guild) guildData = await plugins.get('vimeworld').fetchGuild(user.guild.id);
 			else {
 				const guilds = await plugins.get('vimeworld').searchGuild(args.query);
-				const [guild] = await responder.selection(guilds, { exit: () => {}, mapFunc: g => `${g.name} (${g.tag ? `Тег: ${g.tag}, ` : ""}Уровень: ${g.level}, ID: ${g.id})`, title: "Выбор гильдии для просмотра подробной информации по ней" })
+				const [guild] = await responder.selection(guilds, { exit: () => {}, mapFunc: g => t(`{{SELECTOR_ELEMENT${g.tag ? '' : '_NO'}_TAG}}`, { ...g }), title: "{{SELECTOR_TITLE}}" })
 				guildData = await plugins.get('vimeworld').fetchGuild(guild.id);
 			}
-			moment.locale("ru");
+			moment.locale(settings.lang);
 			const pages = [];
 			pages.push({
-				title: 'Основная информация',
+				title: t('{{MAIN_INFO.TITLE}}'),
 				author: { name: guildData.name },
 				color: colors[guildData.color],
 				thumbnail: { url: guildData.avatar_url },
-				description: `${guildData.tag ? `Тег: ${guildData.tag}\n` : ""}Уровень: ${guildData.level || "0"}\n` +
-				`Прогресс уровня: ${(guildData.levelPercentage * 100).toFixed(2) || "0"}%\nID: ${guildData.id}\n` +
-				`Количество монет: ${guildData.totalCoins}\nДата создания: ${moment(guildData.created * 1000).fromNow()}`
+				description: t(`{{MAIN_INFO.${guildData.tag ? '' : 'NO_'}TAG_DESCRIPTION}}`, { ...guildData,
+					percentage: (guildData.levelPercentage * 100).toFixed(2),
+					date: `${moment.utc(guildData.created * 1000).format("LLLL")} (${moment.utc(guildData.created * 1000).fromNow()})`,
+					coins: guildData.coins || '0'
+				})
 			});
 			if (guildData.perks) pages.push({
-				title: 'Улучшения',
+				title: t('{{PERKS_INFO.TITLE}}'),
 				author: { name: guildData.name },
 				color: colors[guildData.color],
 				thumbnail: { url: guildData.avatar_url },
-				description: Object.keys(guildData.perks).map(v => `\t**${v}:** ${guildData.perks[v].name} (уровень: ${guildData.perks[v].level || "0"})`).join("\n")
+				description: Object.keys(guildData.perks).map(v => t('{{PERKS_INFO.PERK_DESC}}', { name: guildData.perks[v].name, level: guildData.perks[v].level || '0' })).join("\n")
 			});
 			pages.push({
-				title: 'Участники',
+				title: t('{{MEMBERS_INFO.TITLE}}'),
 				author: { name: guildData.name },
 				color: colors[guildData.color],
 				thumbnail: { url: guildData.avatar_url },
-				description: applyDescription(guildData.members, { mapFunc: (x) => `\`${x.user.username}\`` }).map(v => '`' + v.user.username + '`').join(", ")
+				description: applyDescription(guildData.members, { mapFunc: (x) => `\`${x.user.username}\`` })
 			});
 			return reactionMenu(msg, pages);
 		} catch {
-			return await responder.error("Произошла ошибка/достигнут лимит запросов. Попробуйте позже.");
+			return await responder.error("{{%errors.VIME}}");
 		}
 	}
 };
