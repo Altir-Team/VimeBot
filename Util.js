@@ -145,7 +145,7 @@ module.exports = class Utils {
     static applyDescription (array, { mapFunc = (x) => x, separator = ', ' }) {
         do {
             array.pop();
-        } while (array.map(mapFunc).join(separator) > 2048)
+        } while (array.map(mapFunc).join(separator).length > 2048)
         return array.map(mapFunc).join(separator);
     }
 };
