@@ -38,9 +38,9 @@ module.exports = class Utils {
             let page = 0;
             if (message.channel.guild && !message.channel.permissionsOf(message._client.user.id).has('addReactions')) return resolve([pages[0], 0]);
             if (contents.length <= 1) return resolve([pages[0], 0]);
-            const collector = new ReactionCollector(msg, (_, emoji, userID) => ['◀', '▶', '⏹'].concat(agree ? '✅' : [], fast ? ['⏮', '⏭'] : []).includes(emoji.name) && userID == message.author.id);
+            const collector = new ReactionCollector(msg, (emoji, userID) => ['◀', '▶', '⏹'].concat(agree ? '✅' : [], fast ? ['⏮', '⏭'] : []).includes(emoji.name) && userID == message.author.id);
             const edit = () => msg.edit(getMessage(contents[page]));
-            collector.on('collect', (_, emoji) => {
+            collector.on('collect', (emoji) => {
                 if (emoji.name == '◀') {
                     if (page == 0) return;
                     page--;
@@ -68,7 +68,7 @@ module.exports = class Utils {
                     edit();
                 }
             });
-            collector.on('remove', (_, emoji) => {
+            collector.on('remove', (emoji) => {
                 if (emoji.name == '◀') {
                     if (page == 0) return;
                     page--;
