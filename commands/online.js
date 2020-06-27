@@ -28,11 +28,11 @@ module.exports = class Online extends Command {
 			try {
 				const online = await plugins.get('vimeworld').getOnline('players');
 				const types = Object.keys(online.separated);
-				const { vimeGames } = client;
+				const { games } = plugins.get('vimeworld');
 				return await responder.embed({
 					title: t('{{PLAYERS_TITLE}}'),
 					color: client.vimeColor,
-					description: t(`{{PLAYERS_ONLINE_FULL}}\n\n${types.map(c => t(`\t{{PLAYERS_ONLINE_TYPE}}`, [c !== "lobby" ? vimeGames.find(g => g.id.toLowerCase() == c).name : "Lobby", online.separated[c]])).join('\n')}`, [online.total])
+					description: t(`{{PLAYERS_ONLINE_FULL}}\n\n${types.map(c => t(`\t{{PLAYERS_ONLINE_TYPE}}`, [c !== "lobby" ? games.find(g => g.id.toLowerCase() == c).name : "Lobby", online.separated[c]])).join('\n')}`, [online.total])
 				}).send();
 			} catch {
 				return await responder.error("{{%errors.VIME}}");

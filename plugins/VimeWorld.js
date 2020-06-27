@@ -1,8 +1,12 @@
 const { get } = require('https');
+const { off } = require('process');
 module.exports = class VimeWorld {
     constructor (_, token) {
         this._token = token;
         this.baseURL = 'api.vimeworld.ru';
+        this.achievements = null;
+        this.games = null;
+        this.leaderboards = null;
     }
     get rankMap () {
         return {
@@ -22,6 +26,18 @@ module.exports = class VimeWorld {
             ADMIN: {rank: "Главный админ", prefix: "[Гл. админ]", color: 0x00bebe}
         }
     }
+
+    /**
+     * Регистрация плагина
+     * @returns {Promise<VimeWorld>}
+     */
+    async register () {
+        this.achievements = await this.getAchievements();
+        this.games = await this.getGames();
+        this.leaderboards = await this.getLeaderboardList();
+        return this;
+    }
+
     _request (path) {
         return new Promise((resolve, reject) => {
             const options = { host: this.baseURL, path: '/' + path };
@@ -68,7 +84,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserStats (ID) {
-        if (typeof ID !== 'number') return Promise.reject('ID must be a number');
+        if (typeof ID !== 'number') throw 'ID must be a number';
         return await this._request(`user/${ID}/stats`);
     }
     /**
@@ -77,7 +93,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserAchievements (ID) {
-        if (typeof ID !== 'number') return Promise.reject('ID must be a number');
+        if (typeof ID !== 'number') throw 'ID must be a number';
         return await this._request(`user/${ID}/achievements`);
     }
     /**
@@ -86,7 +102,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserLeaderboards (ID) {
-        if (typeof ID !== 'number') return Promise.reject('ID must be a number');
+        if (typeof ID !== 'number') throw 'ID must be a number';
         return await this._request(`user/${ID}/leaderboards`);
     }
     /**
@@ -95,8 +111,8 @@ module.exports = class VimeWorld {
      * @returns {Promise<Array<Object>>}
      */
     async searchGuild (query) {
-        if (typeof query !== 'string') return Promise.reject('query must be a string');
-        if (query.length < 2) return Promise.reject('query length must be 2 or more');
+        if (typeof query !== 'string') throw 'query must be a string';
+        if (query.length < 2) throw 'query length must be 2 or more';
         return await this._request('guild/search?query=' + encodeURIComponent(query));
     }
     /**
@@ -108,14 +124,14 @@ module.exports = class VimeWorld {
     async fetchGuild (query, type = 'id') {
         switch (type) {
             case 'id':
-                if (typeof query !== 'number') return Promise.reject('query with id search must be a number');
+                if (typeof query !== 'number') throw 'query with id search must be a number';
                 return await this._request('guild/get?id=' + query);
             case 'name':
             case 'tag':
-                if (typeof query !== 'string') return Promise.reject(`query with ${type == 'name' ? 'name' : 'tag'} search must be a string`);
+                if (typeof query !== 'string') throw `query with ${type == 'name' ? 'name' : 'tag'} search must be a string`;
                 return await this._request(`guild/get?${type == 'name' ? 'name' : 'tag'}=${encodeURIComponent(query)}`);
             default:
-                return Promise.reject('Unknown search type');
+                throw 'Unknown search type';
         }
     }
     /**
@@ -136,7 +152,7 @@ module.exports = class VimeWorld {
                 path = 'online/staff';
                 break;
             default:
-                return Promise.reject('Unknown online type');
+                throw 'Unknown online type';
         }
         return await this._request(path);
     }
@@ -167,5 +183,20 @@ module.exports = class VimeWorld {
     */
     async getLocales (lang = 'ru') {
         return await this._request('locale/' + lang);
+    }
+    /**
+     * 
+     * @param {String} type Тип таблицы рекордов
+     * @param {String} [sort] Вариант таблицы
+     * @param {Number} [size] Лимит рекордов
+     * @param {Number} [offset] Отступ рекордов от начала
+     */
+    async getLeaderboard (type, sort = null, size = 100, offset = 0) {
+        if (typeof type !== 'string') throw 'Invalid leaderboard type';
+        const params = new URLSearchParams();
+        if (size < 0 || size > 1000) throw 'Invalid size';
+        if (size) params.set('size', size);
+        if (offset) params.set('offset', offset);
+        return await this._request(`leaderboard/get/${type}${(sort ? '/' + sort : '') + (params.toString().length ? '?' + params.toString() : '')}`);
     }
 };

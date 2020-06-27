@@ -1,6 +1,6 @@
 const { Command } = require("../../");
-const { locale, utc } = require("moment");
-const { declOfNum, reactionMenu, timeObj } = require("../Util");
+const { locale, utc, duration } = require("moment");
+const { reactionMenu } = require("../Util");
 module.exports = class UserStat extends Command {
 	constructor (...args) {
 		super (...args, {
@@ -35,12 +35,13 @@ module.exports = class UserStat extends Command {
 					user.level || '0',
 					(user.levelPercentage * 100).toFixed(2),
 					plugins.get('vimeworld').rankMap[user.rank].rank,
+					duration(user.playedSeconds * 1000).humanize(),
 					user.lastSeen ? `${utc(user.lastSeen * 1000).format("LLLL")} (${utc(user.lastSeen * 1000).fromNow()})` : '',
 					user.guild?.name])
 			});
 			if (flags.g) {
 				const { stats } = await plugins.get('vimeworld').getUserStats(user.id);
-				const games = client.vimeGames;
+				const games = plugins.get('vimeworld').games;
 				const { t } = responder;
 				Object.keys(stats).map(x => {
 					let game = stats[x].global;
@@ -56,7 +57,7 @@ module.exports = class UserStat extends Command {
 			}
 			if (flags.a) {
 				const { achievements } = await plugins.get('vimeworld').getUserAchievements(user.id);
-				const { vimeAchievements } = client;
+				const { achievements: vimeAchievements } = plugins.get('vimeworld');
 				const categories = Reflect.ownKeys(vimeAchievements);
 				for (const c of categories)
 					pages.push({
