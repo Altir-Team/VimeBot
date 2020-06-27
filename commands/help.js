@@ -18,7 +18,7 @@ module.exports = class Help extends Command {
 			}, []).sort();
 			responder.reply(["**{{COMMANDS_LIST}}**\n",
 				"```",
-				categories.map(x => `\t${x}: ${commands.filter(f => f.group == x && f).reduce((u, i) => u.includes(i) ? u : [...u, i], []).map(f => f.name).join(", ")}`).join("\n"),
+				categories.map(x => `\t${x}: ${commands.filter(f => !f.options.adminOnly && f.group == x && f).reduce((u, i) => u.includes(i) ? u : [...u, i], []).map(f => f.name).join(", ")}`).join("\n"),
 				"```"].join("\n"));
 		} else {
 			const { t } = responder;
