@@ -7,7 +7,8 @@ module.exports = class Online extends Command {
 				eval: {
 					usage: [{ name: "code", last: true }],
 					flags: [{ name: 'async' }]
-				}
+				},
+				reload: {}
 			},
 			options: { adminOnly: true }
 		});
@@ -29,4 +30,8 @@ module.exports = class Online extends Command {
             return await responder.format('code:').send(e.stack);
         }
 	}
+	reload({commands}, responder) {
+        commands.reload();
+        responder.success('hell yea');
+    }
 };

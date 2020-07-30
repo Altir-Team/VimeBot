@@ -84,7 +84,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserStats (ID) {
-        if (typeof ID !== 'number') throw 'ID must be a number';
+        if (typeof ID !== 'number') throw new Error('ID must be a number');
         return await this._request(`user/${ID}/stats`);
     }
     /**
@@ -93,7 +93,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserAchievements (ID) {
-        if (typeof ID !== 'number') throw 'ID must be a number';
+        if (typeof ID !== 'number') throw new Error('ID must be a number');
         return await this._request(`user/${ID}/achievements`);
     }
     /**
@@ -102,7 +102,7 @@ module.exports = class VimeWorld {
      * @returns {Promise<Object>}
      */
     async getUserLeaderboards (ID) {
-        if (typeof ID !== 'number') throw 'ID must be a number';
+        if (typeof ID !== 'number') throw new Error('ID must be a number');
         return await this._request(`user/${ID}/leaderboards`);
     }
     /**
@@ -111,8 +111,8 @@ module.exports = class VimeWorld {
      * @returns {Promise<Array<Object>>}
      */
     async searchGuild (query) {
-        if (typeof query !== 'string') throw 'query must be a string';
-        if (query.length < 2) throw 'query length must be 2 or more';
+        if (typeof query !== 'string') throw new Error('query must be a string');
+        if (query.length < 2) throw new Error('query length must be 2 or more');
         return await this._request('guild/search?query=' + encodeURIComponent(query));
     }
     /**
@@ -124,14 +124,14 @@ module.exports = class VimeWorld {
     async fetchGuild (query, type = 'id') {
         switch (type) {
             case 'id':
-                if (typeof query !== 'number') throw 'query with id search must be a number';
+                if (typeof query !== 'number') throw new Error('query with id search must be a number');
                 return await this._request('guild/get?id=' + query);
             case 'name':
             case 'tag':
-                if (typeof query !== 'string') throw `query with ${type == 'name' ? 'name' : 'tag'} search must be a string`;
+                if (typeof query !== 'string') throw new Error(`query with ${type == 'name' ? 'name' : 'tag'} search must be a string`);
                 return await this._request(`guild/get?${type == 'name' ? 'name' : 'tag'}=${encodeURIComponent(query)}`);
             default:
-                throw 'Unknown search type';
+                throw new Error('Unknown search type');
         }
     }
     /**
@@ -152,7 +152,7 @@ module.exports = class VimeWorld {
                 path = 'online/staff';
                 break;
             default:
-                throw 'Unknown online type';
+                throw new Error('Unknown online type');
         }
         return await this._request(path);
     }
@@ -179,22 +179,28 @@ module.exports = class VimeWorld {
     }
     /**
     * Получение официальной локализации с сервера VimeWorld
+    * @param {String} [lang] Язык локализации
+    * @param {Array<String>} [parts] Части локализации
     * @returns {Promise<Object>}
     */
-    async getLocales (lang = 'ru') {
-        return await this._request('locale/' + lang);
+    async getLocales (lang = 'ru', parts = []) {
+        if (typeof parts == 'string') parts = parts.split(',');
+        if (!Array.isArray(parts)) throw new Error('Parts must be string or array');
+        return await this._request('locale/' + lang + (parts.length ? `?parts=${parts.join(',')}` : ''));
     }
     /**
      * 
      * @param {String} type Тип таблицы рекордов
-     * @param {String} [sort] Вариант таблицы
-     * @param {Number} [size] Лимит рекордов
-     * @param {Number} [offset] Отступ рекордов от начала
+     * @param {Object} [options] Опции запроса
+     * @param {String} [options.sort] Вариант таблицы
+     * @param {Number} [options.size] Лимит рекордов
+     * @param {Number} [options.offset] Отступ рекордов от начала
      */
-    async getLeaderboard (type, sort = null, size = 100, offset = 0) {
-        if (typeof type !== 'string') throw 'Invalid leaderboard type';
+    async getLeaderboard (type, options = {}) {
+        const { sort = null, size = 100, offset = 0 } = options;
+        if (typeof type !== 'string') throw new Error('Invalid leaderboard type');
         const params = new URLSearchParams();
-        if (size < 0 || size > 1000) throw 'Invalid size';
+        if (size < 0 || size > 1000) throw new Error('Invalid size');
         if (size) params.set('size', size);
         if (offset) params.set('offset', offset);
         return await this._request(`leaderboard/get/${type}${(sort ? '/' + sort : '') + (params.toString().length ? '?' + params.toString() : '')}`);

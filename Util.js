@@ -60,11 +60,13 @@ module.exports = class Utils {
                     return resolve([]);
                 }
                 if (fast && emoji.name == '⏮') {
+                    if (page == 0) return;
                     page = 0;
                     edit();
                 }
                 if (fast && emoji.name == '⏭') {
-                    page = --pages.length;
+                    if (page == pages.length - 1) return;
+                    page = pages.length - 1;
                     edit();
                 }
             });
@@ -80,10 +82,12 @@ module.exports = class Utils {
                     edit();
                 }
                 if (fast && emoji.name == '⏮') {
+                    if (page == 0) return;
                     page = 0;
                     edit();
                 }
                 if (fast && emoji.name == '⏭') {
+                    if (page == pages.length - 1) return;
                     page = pages.length - 1;
                     edit();
                 }

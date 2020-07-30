@@ -1,0 +1,27 @@
+{
+    "DESCRIPTION": "Таблицы рекордов на VimeWorld MiniGames",
+    "LIST_STRING": {
+        "GUILD": "Гильдия: `{name} ({id})`. **Тег: `{tag}`.** Уровень: `{level}`. Монет: `{addition.totalCoins}`",
+        "GUILD_NOTAG": "Гильдия: `{name} ({id})`. Уровень: `{level}`. Монет: `{addition.totalCoins}`",
+        "USERS": "Игрок: `{name} ({id})`. Уровень: `{level}`. Ранк: `{rank}`"
+    },
+    "TYPES": {
+        "USER": "игроков",
+        "GUILD": "гильдий"
+    },
+    "FOOTER": {
+        "NO_PLACE": "Вас нет в этом топе",
+        "ON_PLACE": "Вы на {place}-м месте в этом топе",
+        "GUILD_NO_PLACE": "Вашей гильдии нет в этом топе",
+        "GUILD_ON_PLACE": "Ваша гильдия на {place}-м месте в этом топе"
+    },
+    "MENUS": {
+        "CHOOSE_BOARD": "Выберите таблицу рекордов",
+        "CHOOSE_SORT": "Выберите значение, по которому будет сортироваться таблица",
+        "SKIP": "Пропустить"
+    },
+    "FAILED_FETCH": "не удалось найти таблицу рекордов",
+    "TOP_TITLE": "Топ по режиму {boardType}",
+    "TOP_SINGLE_TITLE": "Топ {boardType}",
+    "WITH_SORT": "с сортировкой по значению \"{sortType}\""
+}
