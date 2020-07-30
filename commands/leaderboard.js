@@ -28,7 +28,7 @@ module.exports = class Leaderboard extends Command {
             name: 'leaderboard',
             description: '{{@leaderboard.DESCRIPTION}}',
             group: '{{%CATEGORIES.STATISTIC}}',
-            options: { adminOnly: true, localeKey: 'leaderboard' }
+            options: { localeKey: 'leaderboard' }
         });
     }
     async handle ({ msg, plugins, settings, client }, responder) {
