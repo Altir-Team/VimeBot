@@ -3,6 +3,7 @@ module.exports = class Help extends Command {
 	constructor (...args) {
 		super (...args, {
 			name: "help",
+			aliases: ["commands", "cmds", "команды", "помощь"],
 			group: "{{%CATEGORIES.CORE}}",
 			usage: [{ name: "command", type: "command", optional: true, displayName: '{{@help.ARGS_COMMAND}}' }],
 			description: "{{@help.DESCRIPTION}}",
