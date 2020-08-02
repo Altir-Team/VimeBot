@@ -1,5 +1,6 @@
 require("dotenv-safe").config();
 const Client = require("../");
+const { Collection, User } = require('eris');
 const SQLite = require("better-sqlite3");
 const VimeWorldPlugin = require('./plugins/VimeWorld');
 const StatPosterPlugin = require('./plugins/StatPoster');
@@ -8,8 +9,10 @@ const bot = new Client({
 	locales: 'i18n',
 	commands: 'commands',
 	admins: (process.env.ADMINS || "").split(","),
-	prefix: process.env.PREFIX
+	prefix: process.env.PREFIX,
+	messageLimit: 0
 });
+bot.users = new Collection(User, 0);
 
 !require('fs').statSync('lists.json') && require('fs').writeFileSync('lists.json', '[]');
 
