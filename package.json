@@ -1,6 +1,6 @@
 {
   "name": "vimebot",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "Бот, который получает информацию о чем-либо с Minecraft сервера VimeWorld MiniGames",
   "main": "index.js",
   "dependencies": {
@@ -9,5 +9,5 @@
     "moment": "^2.24.0"
   },
   "author": "bit0r1n",
-  "license": "ISC"
+  "devDependencies": {}
 }
