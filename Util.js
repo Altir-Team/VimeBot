@@ -29,56 +29,56 @@ module.exports = class Utils {
             let page = 0;
             if (message.channel.guild && !message.channel.permissionsOf(message._client.user.id).has("addReactions")) return resolve([pages[0], 0]);
             if (contents.length <= 1) return resolve([pages[0], 0]);
-            const collector = new ReactionCollector(msg, (emoji, userID) => ["◀", "▶", "⏹"].concat(agree ? "✅" : [], fast ? ["⏮", "⏭"] : []).includes(emoji.name) && userID == message.author.id);
+            const collector = new ReactionCollector(msg, (emoji, userID) => ["◀", "▶", "⏹"].concat(agree ? "✅" : [], fast ? ["⏮", "⏭"] : []).includes(emoji.name) && userID === message.author.id);
             const edit = () => msg.edit(getMessage(contents[page]));
             collector.on("collect", (emoji) => {
-                if (emoji.name == "◀") {
-                    if (page == 0) return;
+                if (emoji.name === "◀") {
+                    if (page === 0) return;
                     page--;
                     edit();
                 }
-                if (emoji.name == "▶") {
-                    if (page == contents.length - 1) return;
+                if (emoji.name === "▶") {
+                    if (page === contents.length - 1) return;
                     page++;
                     edit();
                 }
-                if (agree && emoji.name == "✅") {
+                if (agree && emoji.name === "✅") {
                     collector.stop();
                     return resolve([pages[page], page]);
                 }
-                if (emoji.name == "⏹") {
+                if (emoji.name === "⏹") {
                     collector.stop();
                     return resolve([]);
                 }
-                if (fast && emoji.name == "⏮") {
-                    if (page == 0) return;
+                if (fast && emoji.name === "⏮") {
+                    if (page === 0) return;
                     page = 0;
                     edit();
                 }
-                if (fast && emoji.name == "⏭") {
-                    if (page == pages.length - 1) return;
+                if (fast && emoji.name === "⏭") {
+                    if (page === pages.length - 1) return;
                     page = pages.length - 1;
                     edit();
                 }
             });
             collector.on("remove", (emoji) => {
-                if (emoji.name == "◀") {
-                    if (page == 0) return;
+                if (emoji.name === "◀") {
+                    if (page === 0) return;
                     page--;
                     edit();
                 }
-                if (emoji.name == "▶") {
-                    if (page == contents.length - 1) return;
+                if (emoji.name === "▶") {
+                    if (page === contents.length - 1) return;
                     page++;
                     edit();
                 }
-                if (fast && emoji.name == "⏮") {
-                    if (page == 0) return;
+                if (fast && emoji.name === "⏮") {
+                    if (page === 0) return;
                     page = 0;
                     edit();
                 }
-                if (fast && emoji.name == "⏭") {
-                    if (page == pages.length - 1) return;
+                if (fast && emoji.name === "⏭") {
+                    if (page === pages.length - 1) return;
                     page = pages.length - 1;
                     edit();
                 }
@@ -118,7 +118,7 @@ module.exports = class Utils {
         const n1 = n % 10;
         if (n > 10 && n < 20) { return titles[2]; }
         if (n1 > 1 && n1 < 5) { return titles[1]; }
-        if (n1 == 1) { return titles[0]; }
+        if (n1 === 1) { return titles[0]; }
         return titles[2];
     }
     static timeObj (milliseconds) {

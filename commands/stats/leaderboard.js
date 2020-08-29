@@ -35,25 +35,25 @@ module.exports = class Leaderboard extends Command {
         try {
             const [leaderboardObject] = await responder.selection(plugins.get("vimeworld").leaderboards, { mapFunc: lb => lb.description, title: "{{MENUS.CHOOSE_BOARD}}" });
             const [sortType] = await responder.selection(["{{MENUS.SKIP}}", ...leaderboardObject.sort], { title: "{{MENUS.CHOOSE_SORT}}" });
-            const board = await plugins.get("vimeworld").getLeaderboard(leaderboardObject.type, { sort: sortType == "{{MENUS.SKIP}}" ? null : sortType, size: leaderboardObject.max_size });
+            const board = await plugins.get("vimeworld").getLeaderboard(leaderboardObject.type, { sort: sortType === "{{MENUS.SKIP}}" ? null : sortType, size: leaderboardObject.max_size });
             if (!board.records?.length) return responder.error("{{FAILED_FETCH}}");
             const itemsCount = ["user", "guild"].includes(leaderboardObject.type) ? 15 : 5;
             const statsLocales = JSON.parse(await fs.readFile(join(__dirname, "..", "i18n", settings.lang, "games.json")));
             const list = await Promise.all(board.records.batch(itemsCount).map(async (bunch, bunchIndex) => {
-                const embed = { title: responder.t(["user", "guild"].includes(leaderboardObject.type) ? "{{TOP_SINGLE_TITLE}}" : "{{TOP_TITLE}}" + (sortType == "{{MENUS.SKIP}}" ? "" : " ({{WITH_SORT}})"), { sortType, boardType: ["user", "guild"].includes(leaderboardObject.type) ? responder.t(`{{TYPES.${leaderboardObject.type.toUpperCase()}}}`) : plugins.get("vimeworld").games.find(game => game.id == leaderboardObject.type.replace(/_monthly/g, "").toUpperCase()).name }), color: client.vimeColor };
+                const embed = { title: responder.t(["user", "guild"].includes(leaderboardObject.type) ? "{{TOP_SINGLE_TITLE}}" : "{{TOP_TITLE}}" + (sortType === "{{MENUS.SKIP}}" ? "" : " ({{WITH_SORT}})"), { sortType, boardType: ["user", "guild"].includes(leaderboardObject.type) ? responder.t(`{{TYPES.${leaderboardObject.type.toUpperCase()}}}`) : plugins.get("vimeworld").games.find(game => game.id === leaderboardObject.type.replace(/_monthly/g, "").toUpperCase()).name }), color: client.vimeColor };
                 embed.description = bunch.map((o, itemIndex) => { const item = new ListItem(o); return responder.t(`**${bunchIndex * itemsCount + itemIndex + 1}.** ${item.toString()}${statsLocales[leaderboardObject.type] ? ` **${Object.entries(statsLocales[leaderboardObject.type]).map(([stat, translation]) => `${translation}: \`${item.rawObject[stat]}\``).join(". ")}**`: ""}`, { ...item, addition: item.rawObject }); }).join("\n");
                 if (settings.vimeAccount) {
                     embed.footer = {};
-                    if (board.leaderboard.type == "guild") {
+                    if (board.leaderboard.type === "guild") {
                         try {
                             const user = await plugins.get("vimeworld").getUser(settings.vimeAccount);
                             if (user.guild) {
-                                const index = board.records.findIndex(guild => guild.id == user.guild.id);
+                                const index = board.records.findIndex(guild => guild.id === user.guild.id);
                                 embed.footer.text = responder.t(index === -1 ? "{{FOOTER.GUILD_NO_PLACE}}" : "{{FOOTER.GUILD_ON_PLACE}}", { place: index + 1 });
                             }
                         } catch {}
                     } else {
-                        const index = board.records.findIndex(user => user.id == settings.vimeAccount);
+                        const index = board.records.findIndex(user => user.id === settings.vimeAccount);
                         embed.footer.text = responder.t(index === -1 ? "{{FOOTER.NO_PLACE}}" : "{{FOOTER.ON_PLACE}}", { place: index + 1 });
                     }
                 }

@@ -50,7 +50,7 @@ module.exports = class UserStat extends Command {
                         if (!game[stat]) game[stat] = "0";
                     pages.push({
                         color: plugins.get("vimeworld").rankMap[user.rank].color || client.vimeColor,
-                        title: t("{{GAMES_TITLE}}", [games.find(v => v.id == gameID).name, user.username]),
+                        title: t("{{GAMES_TITLE}}", [games.find(v => v.id === gameID).name, user.username]),
                         description: t(gameStats.map(statName => `{{@games.${gameID.toLowerCase() + "." + statName}}}: ${game[statName]}`).join("\n"))
                     });
                 });
@@ -63,7 +63,7 @@ module.exports = class UserStat extends Command {
                     pages.push({
                         color: plugins.get("vimeworld").rankMap[user.rank].color || client.vimeColor,
                         title: t("{{ACHIEVEMENTS_TITLE}}", [category, user.username]),
-                        description: `${vimeAchievements[category].map(achievement => t(`{{ACHIEVEMENT}}${achievements.find(userAch => userAch.id == achievement.id) ? "   |   **{{ACHIEVEMENT_COMPLETE}}**" : ""}`, [achievement.title, achievement.description.join("; "), achievement.reward])).join("\n")}`
+                        description: `${vimeAchievements[category].map(achievement => t(`{{ACHIEVEMENT}}${achievements.find(userAch => userAch.id === achievement.id) ? "   |   **{{ACHIEVEMENT_COMPLETE}}**" : ""}`, [achievement.title, achievement.description.join("; "), achievement.reward])).join("\n")}`
                     });
             }
             return reactionMenu(msg, pages, { fast: true });

@@ -66,16 +66,16 @@ module.exports = class VimeWorld {
         let path = ":opt";
         if (Array.isArray(identifiers)) {
             opts = identifiers;
-            if (typeof identifiers[0] == "number") path = "user/:opt";
+            if (typeof identifiers[0] === "number") path = "user/:opt";
             else path = "user/name/:opt";
         } else {
             opts.push(identifiers);
-            if (typeof identifiers == "number") path = "user/:opt";
+            if (typeof identifiers === "number") path = "user/:opt";
             else path = "user/name/:opt";
         }
         opts.length = 50;
         opts = opts.filter(x => !!x);
-        return this._request(path.replace(":opt", opts.map(x => encodeURIComponent(typeof x == "string" ? x.split(",")[0] : x)).join(",")));
+        return this._request(path.replace(":opt", opts.map(x => encodeURIComponent(typeof x === "string" ? x.split(",")[0] : x)).join(",")));
     }
     /**
      * Получение статистики игрока
@@ -127,8 +127,8 @@ module.exports = class VimeWorld {
             return this._request("guild/get?id=" + query);
         case "name":
         case "tag":
-            if (typeof query !== "string") throw new Error(`query with ${type == "name" ? "name" : "tag"} search must be a string`);
-            return this._request(`guild/get?${type == "name" ? "name" : "tag"}=${encodeURIComponent(query)}`);
+            if (typeof query !== "string") throw new Error(`query with ${type === "name" ? "name" : "tag"} search must be a string`);
+            return this._request(`guild/get?${type === "name" ? "name" : "tag"}=${encodeURIComponent(query)}`);
         default:
             throw new Error("Unknown search type");
         }
@@ -183,7 +183,7 @@ module.exports = class VimeWorld {
     * @returns {Promise<Object>}
     */
     async getLocales (lang = "ru", parts = []) {
-        if (typeof parts == "string") parts = parts.split(",");
+        if (typeof parts === "string") parts = parts.split(",");
         if (!Array.isArray(parts)) throw new Error("Parts must be string or array");
         return this._request("locale/" + lang + (parts.length ? `?parts=${parts.join(",")}` : ""));
     }
