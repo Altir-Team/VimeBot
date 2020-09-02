@@ -1,4 +1,4 @@
-require("dotenv-safe").config();
+require("./loadEnv")();
 const Client = require("../");
 const { Collection, User } = require("eris");
 const SQLite = require("better-sqlite3");

@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "better-sqlite3": "^7.0.1",
-    "dotenv-safe": "^8.2.0",
     "moment": "^2.24.0"
   },
   "author": "bit0r1n"
