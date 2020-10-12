@@ -38,7 +38,7 @@ module.exports = class Leaderboard extends Command {
             const board = await plugins.get("vimeworld").getLeaderboard(leaderboardObject.type, { sort: sortType === "{{MENUS.SKIP}}" ? null : sortType, size: leaderboardObject.max_size });
             if (!board.records?.length) return responder.error("{{FAILED_FETCH}}");
             const itemsCount = ["user", "guild"].includes(leaderboardObject.type) ? 15 : 5;
-            const statsLocales = JSON.parse(await fs.readFile(join(__dirname, "..", "i18n", settings.lang, "games.json")));
+            const statsLocales = plugins.get("i18n").get(settings.lang).games;
             const list = await Promise.all(board.records.batch(itemsCount).map(async (bunch, bunchIndex) => {
                 const embed = { title: responder.t(["user", "guild"].includes(leaderboardObject.type) ? "{{TOP_SINGLE_TITLE}}" : "{{TOP_TITLE}}" + (sortType === "{{MENUS.SKIP}}" ? "" : " ({{WITH_SORT}})"), { sortType, boardType: ["user", "guild"].includes(leaderboardObject.type) ? responder.t(`{{TYPES.${leaderboardObject.type.toUpperCase()}}}`) : plugins.get("vimeworld").games.find(game => game.id === leaderboardObject.type.replace(/_monthly/g, "").toUpperCase()).name }), color: client.vimeColor };
                 embed.description = bunch.map((o, itemIndex) => { const item = new ListItem(o); return responder.t(`**${bunchIndex * itemsCount + itemIndex + 1}.** ${item.toString()}${statsLocales[leaderboardObject.type] ? ` **${Object.entries(statsLocales[leaderboardObject.type]).map(([stat, translation]) => `${translation}: \`${item.rawObject[stat]}\``).join(". ")}**`: ""}`, { ...item, addition: item.rawObject }); }).join("\n");
