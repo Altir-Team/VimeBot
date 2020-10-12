@@ -17,10 +17,9 @@ module.exports = class Help extends Command {
                 if(a.indexOf(b) < 0) a.push(b);
                 return a;
             }, []).sort();
-            responder.reply(["**{{COMMANDS_LIST}}**\n",
-                "```",
-                categories.map(category => `\t${category}: ${commands.filter(command => !command.options.adminOnly && command.group === category && command).reduce((a, b) => a.includes(b) ? a : [...a, b], []).map(command => command.name).join(", ")}`).join("\n"),
-                "```"].join("\n"));
+            responder.reply(["**{{COMMANDS_LIST}}**",
+                categories.map(category => `\t* **${category}**: \n\t-\t${commands.filter(command => !command.options.adminOnly && command.group === category && command).reduce((a, b) => a.includes(b) ? a : [...a, b], []).map(command => "`" + command.name + "`").join(", ")}`).join("\n")]
+            .join("\n"));
         } else {
             const { t } = responder;
             const data = [t("{{COMMAND_INFO}}", [command.name])];
