@@ -32,7 +32,7 @@ module.exports = class Online extends Command {
                 return responder.embed({
                     title: t("{{PLAYERS_TITLE}}"),
                     color: client.vimeColor,
-                    description: t(`{{PLAYERS_ONLINE_FULL}}\n\n${types.map(game => t("\t{{PLAYERS_ONLINE_TYPE}}", [game !== "lobby" ? games.find(type => type.id.toLowerCase() === game).name : "Lobby", online.separated[game]])).join("\n")}`, [online.total])
+                    description: t(`{{PLAYERS_ONLINE_FULL}}\n\n${types.map(game => t("\t{{PLAYERS_ONLINE_TYPE}}", [game !== "lobby" ? games.find(type => type.id.toLowerCase() === game).name : "Lobby", online.separated[game] || "0"])).join("\n")}`, [online.total])
                 }).send();
             } catch {
                 return responder.error("{{%errors.VIME}}");
